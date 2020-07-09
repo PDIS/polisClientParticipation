@@ -181,6 +181,13 @@ module.exports = Handlebones.ModelView.extend({
   events: {
     "focus #comment_form_textarea": function(e) { // maybe on keyup ?
       this.showFormControls();
+      var xid = Utils.getXid();
+      var hasSocial = window.userObject.hasFacebook || window.userObject.hasTwitter || window.userObject.emailVerified || !_.isUndefined(xid) || window.userObject.hasJoin;
+      var needsSocial = preload.firstConv.auth_needed_to_write;
+      if (needsSocial && !hasSocial) {
+        M.add(M.COMMENT_SUBMIT_SOCIAL_NEEDED);
+        this.showSocialAuthChoices();
+      }
     },
     "blur #comment_form_textarea": function(e) {
       var txt = this.$("#comment_form_textarea").val();
